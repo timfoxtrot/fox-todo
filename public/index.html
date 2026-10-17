@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fox Todo</title>
+  <meta name="description" content="Print todo items to a thermal receipt printer.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='8' y='3' width='16' height='26' rx='1.5' fill='%23d9a441'/%3E%3Cpath d='M11 10h10M11 14h10M11 18h6' stroke='%231a1204' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply the saved theme before first paint so the page doesn't flash the wrong colors
+    try {
+      const t = localStorage.getItem('receipttodo:theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (_) { /* storage unavailable */ }
+  </script>
+</head>
+<body>
+  <main>
+    <header class="top">
+      <h1>Fox Todo</h1>
+      <div class="actions">
+        <button id="status" type="button" class="chip" title="Click to refresh printer status">
+          <span class="dot"></span><span id="statusText">Checking printer…</span>
+        </button>
+        <button id="themeBtn" type="button" class="theme-btn"></button>
+      </div>
+    </header>
+
+    <div class="two-col">
+      <section class="panel">
+        <div class="panel-head"><h2>New todo</h2></div>
+        <form id="form" class="todo-form" autocomplete="off">
+          <label class="desc">
+            Task
+            <textarea id="task" name="task" rows="2" maxlength="240" required placeholder="Take the bins out"></textarea>
+            <span class="counter"><span id="taskCount">0</span>/240</span>
+          </label>
+
+          <label class="desc">
+            Notes <span class="muted">(optional)</span>
+            <textarea id="notes" name="notes" rows="2" maxlength="500" placeholder="Blue bin this week"></textarea>
+          </label>
+
+          <div class="desc">
+            <span>Category <span class="muted">(optional)</span></span>
+            <div class="category-grid" id="categoryGrid" role="group" aria-label="Category"></div>
+          </div>
+
+          <label class="f-who">
+            Your name <span class="muted">(optional)</span>
+            <input id="addedBy" name="addedBy" maxlength="32" placeholder="Tim">
+          </label>
+
+          <div class="f-seg">
+            <span>Priority</span>
+            <div class="seg" id="prioritySeg" role="group" aria-label="Priority">
+              <button type="button" data-priority="low">Low</button>
+              <button type="button" data-priority="normal" class="on">Normal</button>
+              <button type="button" data-priority="high">High</button>
+            </div>
+          </div>
+
+          <div class="row-end">
+            <button id="testBtn" type="button" class="ghost">Test slip</button>
+            <button id="submit" type="submit" class="primary">Print it</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Recently printed</h2>
+          <button id="refresh" type="button" class="ghost small">Refresh</button>
+        </div>
+        <div class="table-scroll">
+          <table id="history" aria-label="Recently printed todos"></table>
+        </div>
+      </section>
+    </div>
+
+    <footer class="foot muted small">Prints to <span id="printerAddr">the printer</span> over the network.</footer>
+  </main>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

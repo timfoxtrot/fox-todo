@@ -1,0 +1,19 @@
+{
+  "name": "receipttodo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Print todo items to a Rongta thermal receipt printer over the network",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "testprint": "node scripts/testprint.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
