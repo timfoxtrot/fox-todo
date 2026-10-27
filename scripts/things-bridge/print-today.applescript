@@ -28,7 +28,7 @@ on run
 			set toDoID to id of aToDo as string
 			if seenIDs does not contain toDoID then
 				if seedOnly then
-					markSeen(toDoID)
+					my markSeen(toDoID)
 				else
 					set toDoName to name of aToDo as string
 					set toDoNotes to ""
@@ -36,13 +36,13 @@ on run
 						set toDoNotes to notes of aToDo as string
 					end try
 
-					set jsonBody to "{\"task\":\"" & jsonEscape(toDoName) & "\",\"notes\":\"" & jsonEscape(toDoNotes) & "\",\"addedBy\":\"" & jsonEscape(addedByName) & "\"}"
+					set jsonBody to "{\"task\":\"" & my jsonEscape(toDoName) & "\",\"notes\":\"" & my jsonEscape(toDoNotes) & "\",\"addedBy\":\"" & my jsonEscape(addedByName) & "\"}"
 					set curlCmd to "curl -s -o /dev/null -w '%{http_code}' -X POST " & serverURL & " -H 'Content-Type: application/json' -d " & quoted form of jsonBody
 
 					try
-						set httpStatus to do shell script curlCmd
+						set httpStatus to (do shell script curlCmd)
 						if httpStatus starts with "2" then
-							markSeen(toDoID)
+							my markSeen(toDoID)
 						else
 							log ("Print failed for " & toDoName & " — HTTP " & httpStatus)
 						end if
