@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Runs print-today.applescript every 5 minutes.
+
+  Install:
+    1. Edit the <string> path two lines below the Program key if you put
+       print-today.applescript somewhere other than ~/Scripts/.
+    2. cp com.foxtodo.thingsbridge.plist ~/Library/LaunchAgents/
+    3. launchctl load ~/Library/LaunchAgents/com.foxtodo.thingsbridge.plist
+
+  Logs land in /tmp/foxtodo-thingsbridge.log — tail it to confirm it's running
+  and to see any "Print failed" lines.
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.foxtodo.thingsbridge.plist
+    rm ~/Library/LaunchAgents/com.foxtodo.thingsbridge.plist
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.foxtodo.thingsbridge</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/osascript</string>
+		<string>/Users/YOURUSERNAME/Scripts/print-today.applescript</string>
+	</array>
+
+	<key>StartInterval</key>
+	<integer>300</integer>
+
+	<key>RunAtLoad</key>
+	<true/>
+
+	<key>StandardOutPath</key>
+	<string>/tmp/foxtodo-thingsbridge.log</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/foxtodo-thingsbridge.log</string>
+</dict>
+</plist>

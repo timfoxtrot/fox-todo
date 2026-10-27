@@ -32,6 +32,36 @@ restarts it if it crashes, and opens the port in Windows Firewall for the
 Private network profile. Logs: `data\server.log`. To remove it, run the
 script again with `-Uninstall`.
 
+## Things 3 bridge (Mac)
+
+`scripts/things-bridge/` polls your Mac's Things 3 "Today" list and prints
+each to-do once, via `/api/print`. There's no push API for Things, so this
+runs on a timer (launchd) rather than firing instantly when you add a to-do.
+
+Setup, on the Mac running Things 3:
+
+1. Copy `scripts/things-bridge/print-today.applescript` to `~/Scripts/` (or
+   anywhere — just update the path in the plist to match).
+2. Open it and check `serverURL` points at this server
+   (`http://10.10.10.2:3000/api/print` by default — update if this machine's
+   LAN IP changes).
+3. First run only: set `seedOnly` to `true` and run
+   `osascript ~/Scripts/print-today.applescript` once. This marks everything
+   currently on Today as already-seen without printing it, so the first real
+   run doesn't dump your whole list onto paper at once. Set it back to
+   `false` afterward.
+4. Install the scheduled job:
+   ```bash
+   cp scripts/things-bridge/com.foxtodo.thingsbridge.plist ~/Library/LaunchAgents/
+   # edit the ProgramArguments path inside it to match where you put the script
+   launchctl load ~/Library/LaunchAgents/com.foxtodo.thingsbridge.plist
+   ```
+
+It checks every 5 minutes (`StartInterval` in the plist) and keeps a list of
+already-printed to-do IDs at
+`~/Library/Application Support/FoxTodoBridge/seen-ids.txt` — delete that file
+to reset and reprint everything currently on Today.
+
 ## Configuration
 
 Defaults live in `config.js`; every value can be overridden by an environment
